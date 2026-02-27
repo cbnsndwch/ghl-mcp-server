@@ -1,0 +1,38 @@
+{
+    "compilerOptions": {
+        "target": "es2024",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "moduleDetection": "force",
+        // File Layout
+        "rootDir": "src",
+        "outDir": "dist",
+        // For nodejs:
+        "lib": [
+            "esnext"
+        ],
+        "types": [
+            "node"
+        ],
+        // Other Outputs
+        "sourceMap": true,
+        "declaration": true,
+        "declarationMap": true,
+        // Stricter Typechecking Options
+        "noUncheckedIndexedAccess": true,
+        "exactOptionalPropertyTypes": true,
+        // Recommended Options
+        "strict": true,
+        "verbatimModuleSyntax": true,
+        "isolatedModules": true,
+        "noUncheckedSideEffectImports": true,
+        "skipLibCheck": true,
+    },
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}

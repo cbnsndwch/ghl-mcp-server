@@ -1,0 +1,86 @@
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+.yarn/versions
+.pnp.*
+
+# Dependencies & compiled output
+**/.pnp.*
+**/.terraform
+**/*.tsbuildinfo
+**/vite.config.mts.*
+**/vitest.config.mts.*
+apps/*/vite.config.mts.*
+build
+coverage
+dist
+node_modules
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# macOS
+.DS_Store
+
+# Tests
+coverage
+/.nyc_output
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Environments and credentials
+.dev.vars
+.env
+**/.env
+**/.env*
+**/*.env
+**/infisical-keyring
+*credentials
+
+# Others
+lerna-debug.log
+npm-debug.log
+tsconfig.tsbuildinfo
+.n
+
+# Local only files
+.wrangler/
+.local
+.docker/*.env
+
+# workspace root Turbo files
+/.turbo/cookies
+/.turbo/daemon
+/.turbo/cache
+/.turbo/preferences/tui.json
+
+# local DBs
+*.db
+*.db-shm
+*.db-wal
+*.db-wal2
+
+# Claude Agent temporary files
+tmpclaude-*

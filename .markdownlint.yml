@@ -1,0 +1,12 @@
+# no-duplicate-heading: Multiple headings with the same content
+MD024: false
+
+# line-length: Line length [Expected: 80; Actual: ...]
+MD013: false
+
+# ul-indent: Unordered list indentation
+MD007:
+  indent: 4
+
+# no-inline-html: Inline HTML
+MD033: false
