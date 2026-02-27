@@ -15,30 +15,43 @@ export function registerProductsTools(server: McpServer): void {
             description: 'List products for a location',
             inputSchema: {
                 locationId: z.string().describe('The location ID'),
-                limit: z.number().optional().describe('Maximum number of results'),
+                limit: z
+                    .number()
+                    .optional()
+                    .describe('Maximum number of results'),
                 offset: z.number().optional().describe('Offset for pagination'),
-                search: z.string().optional().describe('Search query'),
+                search: z.string().optional().describe('Search query')
             },
             annotations: {
                 title: 'List Products',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().products.listInvoices(
                     stripUndefined(params)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error listing products: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error listing products: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -51,29 +64,39 @@ export function registerProductsTools(server: McpServer): void {
             description: 'Get a product by ID',
             inputSchema: {
                 productId: z.string().describe('The product ID'),
-                locationId: z.string().describe('The location ID'),
+                locationId: z.string().describe('The location ID')
             },
             annotations: {
                 title: 'Get Product',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().products.getProductById({
                     productId: params.productId,
-                    locationId: params.locationId,
+                    locationId: params.locationId
                 });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting product: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting product: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -88,30 +111,46 @@ export function registerProductsTools(server: McpServer): void {
                 locationId: z.string().describe('The location ID'),
                 name: z.string().describe('Product name'),
                 productType: z.string().describe('Product type'),
-                description: z.string().optional().describe('Product description'),
-                statementDescriptor: z.string().optional().describe('Statement descriptor for billing'),
-                image: z.string().optional().describe('Product image URL'),
+                description: z
+                    .string()
+                    .optional()
+                    .describe('Product description'),
+                statementDescriptor: z
+                    .string()
+                    .optional()
+                    .describe('Statement descriptor for billing'),
+                image: z.string().optional().describe('Product image URL')
             },
             annotations: {
                 title: 'Create Product',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: false,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().products.createProduct(
                     stripUndefined(params)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error creating product: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error creating product: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -127,19 +166,25 @@ export function registerProductsTools(server: McpServer): void {
                 locationId: z.string().describe('The location ID'),
                 name: z.string().describe('Product name'),
                 productType: z.string().describe('Product type'),
-                description: z.string().optional().describe('Product description'),
-                statementDescriptor: z.string().optional().describe('Statement descriptor for billing'),
-                image: z.string().optional().describe('Product image URL'),
+                description: z
+                    .string()
+                    .optional()
+                    .describe('Product description'),
+                statementDescriptor: z
+                    .string()
+                    .optional()
+                    .describe('Statement descriptor for billing'),
+                image: z.string().optional().describe('Product image URL')
             },
             annotations: {
                 title: 'Update Product',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const { productId, ...body } = params;
                 const result = await getGhlClient().products.updateProductById(
@@ -147,12 +192,22 @@ export function registerProductsTools(server: McpServer): void {
                     stripUndefined(body)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error updating product: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error updating product: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -165,29 +220,39 @@ export function registerProductsTools(server: McpServer): void {
             description: 'Delete a product',
             inputSchema: {
                 productId: z.string().describe('The product ID'),
-                locationId: z.string().describe('The location ID'),
+                locationId: z.string().describe('The location ID')
             },
             annotations: {
                 title: 'Delete Product',
                 readOnlyHint: false,
                 destructiveHint: true,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().products.deleteProductById({
                     productId: params.productId,
-                    locationId: params.locationId,
+                    locationId: params.locationId
                 });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error deleting product: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error deleting product: ${error.message}`
+                        }
+                    ]
                 };
             }
         }

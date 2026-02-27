@@ -33,20 +33,22 @@ const mockContacts = {
     removeContactFromCampaign: vi.fn(),
     addContactToWorkflow: vi.fn(),
     addFollowersContact: vi.fn(),
-    removeFollowersContact: vi.fn(),
+    removeFollowersContact: vi.fn()
 };
 
 const mockClient = { contacts: mockContacts };
 
 vi.mock('../../ghl-client.js', () => ({
-    getGhlClient: () => mockClient,
+    getGhlClient: () => mockClient
 }));
 
 import { registerContactsTools } from '../../tools/contacts/index.js';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 interface RegisteredTool {
-    handler: { call: (params: any, extra: any) => Promise<any> } | ((params: any, extra: any) => Promise<any>);
+    handler:
+        | { call: (params: any, extra: any) => Promise<any> }
+        | ((params: any, extra: any) => Promise<any>);
 }
 
 function createTestServer(): McpServer {
@@ -59,18 +61,28 @@ function createTestServer(): McpServer {
 }
 
 function getTool(server: McpServer, name: string): RegisteredTool {
-    const tools = (server as any)._registeredTools as Record<string, RegisteredTool>;
+    const tools = (server as any)._registeredTools as Record<
+        string,
+        RegisteredTool
+    >;
     const tool = tools[name];
     if (!tool) {
-        throw new Error(`Tool "${name}" not found. Available: ${Object.keys(tools).join(', ')}`);
+        throw new Error(
+            `Tool "${name}" not found. Available: ${Object.keys(tools).join(', ')}`
+        );
     }
     return tool;
 }
 
-async function callTool(server: McpServer, name: string, params: Record<string, unknown> = {}) {
+async function callTool(
+    server: McpServer,
+    name: string,
+    params: Record<string, unknown> = {}
+) {
     const tool = getTool(server, name);
     // The handler can be either a direct function or an object with a `call` method
-    const handler = typeof tool.handler === 'function' ? tool.handler : tool.handler.call;
+    const handler =
+        typeof tool.handler === 'function' ? tool.handler : tool.handler.call;
     return handler(params, {});
 }
 
@@ -86,18 +98,20 @@ describe('contacts tools', () => {
     // ── contacts_search ────────────────────────────────────────────────
     describe('contacts_search', () => {
         it('calls searchContactsAdvanced with correct params', async () => {
-            mockContacts.searchContactsAdvanced.mockResolvedValue({ contacts: [] });
+            mockContacts.searchContactsAdvanced.mockResolvedValue({
+                contacts: []
+            });
 
             const result = await callTool(server, 'contacts_search', {
                 locationId: 'loc-123',
                 page: 1,
-                pageLimit: 10,
+                pageLimit: 10
             });
 
             expect(mockContacts.searchContactsAdvanced).toHaveBeenCalledWith({
                 locationId: 'loc-123',
                 page: 1,
-                pageLimit: 10,
+                pageLimit: 10
             });
             expect(result.content[0]!.type).toBe('text');
             expect(result.isError).toBeUndefined();
@@ -109,7 +123,7 @@ describe('contacts tools', () => {
             );
 
             const result = await callTool(server, 'contacts_search', {
-                locationId: 'loc-123',
+                locationId: 'loc-123'
             });
 
             expect(result.isError).toBe(true);
@@ -120,13 +134,17 @@ describe('contacts tools', () => {
     // ── contacts_get ───────────────────────────────────────────────────
     describe('contacts_get', () => {
         it('calls getContact with the contact ID', async () => {
-            mockContacts.getContact.mockResolvedValue({ contact: { id: 'c-1' } });
-
-            const result = await callTool(server, 'contacts_get', {
-                contactId: 'c-1',
+            mockContacts.getContact.mockResolvedValue({
+                contact: { id: 'c-1' }
             });
 
-            expect(mockContacts.getContact).toHaveBeenCalledWith({ contactId: 'c-1' });
+            const result = await callTool(server, 'contacts_get', {
+                contactId: 'c-1'
+            });
+
+            expect(mockContacts.getContact).toHaveBeenCalledWith({
+                contactId: 'c-1'
+            });
             expect(result.isError).toBeUndefined();
 
             const parsed = JSON.parse(result.content[0]!.text);
@@ -137,7 +155,7 @@ describe('contacts tools', () => {
             mockContacts.getContact.mockRejectedValue(new Error('Not found'));
 
             const result = await callTool(server, 'contacts_get', {
-                contactId: 'bad-id',
+                contactId: 'bad-id'
             });
 
             expect(result.isError).toBe(true);
@@ -148,13 +166,15 @@ describe('contacts tools', () => {
     // ── contacts_create ────────────────────────────────────────────────
     describe('contacts_create', () => {
         it('calls createContact with params', async () => {
-            mockContacts.createContact.mockResolvedValue({ contact: { id: 'new-1' } });
+            mockContacts.createContact.mockResolvedValue({
+                contact: { id: 'new-1' }
+            });
 
             const params = {
                 locationId: 'loc-1',
                 firstName: 'Jane',
                 lastName: 'Doe',
-                email: 'jane@example.com',
+                email: 'jane@example.com'
             };
 
             const result = await callTool(server, 'contacts_create', params);
@@ -164,10 +184,12 @@ describe('contacts tools', () => {
         });
 
         it('returns isError on failure', async () => {
-            mockContacts.createContact.mockRejectedValue(new Error('Validation error'));
+            mockContacts.createContact.mockRejectedValue(
+                new Error('Validation error')
+            );
 
             const result = await callTool(server, 'contacts_create', {
-                locationId: 'loc-1',
+                locationId: 'loc-1'
             });
 
             expect(result.isError).toBe(true);
@@ -178,11 +200,13 @@ describe('contacts tools', () => {
     // ── contacts_update ────────────────────────────────────────────────
     describe('contacts_update', () => {
         it('calls updateContact with contactId and body', async () => {
-            mockContacts.updateContact.mockResolvedValue({ contact: { id: 'c-1' } });
+            mockContacts.updateContact.mockResolvedValue({
+                contact: { id: 'c-1' }
+            });
 
             await callTool(server, 'contacts_update', {
                 contactId: 'c-1',
-                firstName: 'Updated',
+                firstName: 'Updated'
             });
 
             expect(mockContacts.updateContact).toHaveBeenCalledWith(
@@ -198,18 +222,22 @@ describe('contacts tools', () => {
             mockContacts.deleteContact.mockResolvedValue({ succeded: true });
 
             const result = await callTool(server, 'contacts_delete', {
-                contactId: 'c-1',
+                contactId: 'c-1'
             });
 
-            expect(mockContacts.deleteContact).toHaveBeenCalledWith({ contactId: 'c-1' });
+            expect(mockContacts.deleteContact).toHaveBeenCalledWith({
+                contactId: 'c-1'
+            });
             expect(result.isError).toBeUndefined();
         });
 
         it('returns isError on failure', async () => {
-            mockContacts.deleteContact.mockRejectedValue(new Error('Forbidden'));
+            mockContacts.deleteContact.mockRejectedValue(
+                new Error('Forbidden')
+            );
 
             const result = await callTool(server, 'contacts_delete', {
-                contactId: 'c-1',
+                contactId: 'c-1'
             });
 
             expect(result.isError).toBe(true);
@@ -224,7 +252,7 @@ describe('contacts tools', () => {
 
             await callTool(server, 'contacts_add_tags', {
                 contactId: 'c-1',
-                tags: ['vip'],
+                tags: ['vip']
             });
 
             expect(mockContacts.addTags).toHaveBeenCalledWith(
@@ -240,10 +268,12 @@ describe('contacts tools', () => {
             mockContacts.getAllNotes.mockResolvedValue({ notes: [] });
 
             const result = await callTool(server, 'contacts_get_notes', {
-                contactId: 'c-1',
+                contactId: 'c-1'
             });
 
-            expect(mockContacts.getAllNotes).toHaveBeenCalledWith({ contactId: 'c-1' });
+            expect(mockContacts.getAllNotes).toHaveBeenCalledWith({
+                contactId: 'c-1'
+            });
             expect(result.isError).toBeUndefined();
         });
     });

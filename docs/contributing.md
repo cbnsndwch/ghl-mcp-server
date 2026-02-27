@@ -41,28 +41,28 @@ export function registerMyResourceTools(server: McpServer): void {
                 limit: z
                     .number()
                     .optional()
-                    .describe('Maximum number of results'),
+                    .describe('Maximum number of results')
             },
             annotations: {
                 title: 'List Resources',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().myResource.list(
-                    stripUndefined(params),
+                    stripUndefined(params)
                 );
                 return {
                     content: [
                         {
                             type: 'text' as const,
-                            text: JSON.stringify(result, null, 2),
-                        },
-                    ],
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
@@ -70,12 +70,12 @@ export function registerMyResourceTools(server: McpServer): void {
                     content: [
                         {
                             type: 'text' as const,
-                            text: `Error listing resources: ${error.message}`,
-                        },
-                    ],
+                            text: `Error listing resources: ${error.message}`
+                        }
+                    ]
                 };
             }
-        },
+        }
     );
 
     // Add more tools following the same pattern...
@@ -95,7 +95,7 @@ import { registerMyResourceTools } from './tools/my-resource/index.js';
 // 2. Add to ALL_REGISTRARS array
 const ALL_REGISTRARS: ToolRegistrar[] = [
     // ... existing registrars
-    registerMyResourceTools,
+    registerMyResourceTools
 ];
 ```
 
@@ -209,14 +209,14 @@ Always wrap params with `stripUndefined()` before passing to the SDK, unless you
 ```typescript
 // ✅ Good — wrapping the full params object
 const result = await getGhlClient().contacts.searchContactsAdvanced(
-    stripUndefined(params),
+    stripUndefined(params)
 );
 
 // ✅ Good — destructuring and passing individually
 const { contactId, ...body } = params;
 const result = await getGhlClient().contacts.updateContact(
     { contactId },
-    stripUndefined(body),
+    stripUndefined(body)
 );
 
 // ❌ Bad — passing raw params with potential undefined values
@@ -228,16 +228,16 @@ const result = await getGhlClient().contacts.updateContact(params);
 Always follow the try/catch pattern:
 
 ```typescript
-async (params) => {
+async params => {
     try {
         const result = await getGhlClient().resource.method(params);
         return {
             content: [
                 {
                     type: 'text' as const,
-                    text: JSON.stringify(result, null, 2),
-                },
-            ],
+                    text: JSON.stringify(result, null, 2)
+                }
+            ]
         };
     } catch (error: any) {
         return {
@@ -245,9 +245,9 @@ async (params) => {
             content: [
                 {
                     type: 'text' as const,
-                    text: `Error <doing thing>: ${error.message}`,
-                },
-            ],
+                    text: `Error <doing thing>: ${error.message}`
+                }
+            ]
         };
     }
 };

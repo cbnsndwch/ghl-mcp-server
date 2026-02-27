@@ -14,28 +14,38 @@ export function registerLocationsTools(server: McpServer): void {
         {
             description: 'Get a location by ID',
             inputSchema: {
-                locationId: z.string().describe('The location ID'),
+                locationId: z.string().describe('The location ID')
             },
             annotations: {
                 title: 'Get Location',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().locations.getLocation({
-                    locationId: params.locationId,
+                    locationId: params.locationId
                 });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting location: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting location: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -57,17 +67,17 @@ export function registerLocationsTools(server: McpServer): void {
                 postalCode: z.string().optional().describe('Postal code'),
                 phone: z.string().optional().describe('Phone number'),
                 website: z.string().optional().describe('Website URL'),
-                timezone: z.string().optional().describe('Timezone'),
+                timezone: z.string().optional().describe('Timezone')
             },
             annotations: {
                 title: 'Update Location',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const { locationId, ...body } = params;
                 const result = await getGhlClient().locations.putLocation(
@@ -75,12 +85,22 @@ export function registerLocationsTools(server: McpServer): void {
                     stripUndefined(body)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error updating location: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error updating location: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -93,31 +113,47 @@ export function registerLocationsTools(server: McpServer): void {
             description: 'Search locations',
             inputSchema: {
                 companyId: z.string().optional().describe('The company ID'),
-                skip: z.string().optional().describe('Number of results to skip'),
-                limit: z.string().optional().describe('Maximum number of results'),
+                skip: z
+                    .string()
+                    .optional()
+                    .describe('Number of results to skip'),
+                limit: z
+                    .string()
+                    .optional()
+                    .describe('Maximum number of results'),
                 order: z.string().optional().describe('Sort order'),
-                email: z.string().optional().describe('Filter by email address'),
+                email: z.string().optional().describe('Filter by email address')
             },
             annotations: {
                 title: 'Search Locations',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().locations.searchLocations(
                     stripUndefined(params)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error searching locations: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error searching locations: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -138,28 +174,38 @@ export function registerLocationsTools(server: McpServer): void {
                 postalCode: z.string().optional().describe('Postal code'),
                 phone: z.string().optional().describe('Phone number'),
                 website: z.string().optional().describe('Website URL'),
-                timezone: z.string().optional().describe('Timezone'),
+                timezone: z.string().optional().describe('Timezone')
             },
             annotations: {
                 title: 'Create Location',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: false,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().locations.createLocation(
                     stripUndefined(params)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error creating location: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error creating location: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -172,29 +218,43 @@ export function registerLocationsTools(server: McpServer): void {
             description: 'Delete a location by ID',
             inputSchema: {
                 locationId: z.string().describe('The location ID'),
-                deleteTwilioAccount: z.boolean().describe('Whether to also delete the associated Twilio account'),
+                deleteTwilioAccount: z
+                    .boolean()
+                    .describe(
+                        'Whether to also delete the associated Twilio account'
+                    )
             },
             annotations: {
                 title: 'Delete Location',
                 readOnlyHint: false,
                 destructiveHint: true,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().locations.deleteLocation({
                     locationId: params.locationId,
-                    deleteTwilioAccount: params.deleteTwilioAccount,
+                    deleteTwilioAccount: params.deleteTwilioAccount
                 });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error deleting location: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error deleting location: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -206,28 +266,38 @@ export function registerLocationsTools(server: McpServer): void {
         {
             description: 'Get tags for a location',
             inputSchema: {
-                locationId: z.string().describe('The location ID'),
+                locationId: z.string().describe('The location ID')
             },
             annotations: {
                 title: 'Get Location Tags',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().locations.getLocationTags({
-                    locationId: params.locationId,
+                    locationId: params.locationId
                 });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting location tags: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting location tags: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -240,17 +310,17 @@ export function registerLocationsTools(server: McpServer): void {
             description: 'Create a tag for a location',
             inputSchema: {
                 locationId: z.string().describe('The location ID'),
-                name: z.string().describe('Tag name'),
+                name: z.string().describe('Tag name')
             },
             annotations: {
                 title: 'Create Location Tag',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: false,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const { locationId, ...body } = params;
                 const result = await getGhlClient().locations.createTag(
@@ -258,12 +328,22 @@ export function registerLocationsTools(server: McpServer): void {
                     stripUndefined(body)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error creating location tag: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error creating location tag: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -275,28 +355,38 @@ export function registerLocationsTools(server: McpServer): void {
         {
             description: 'Get custom fields for a location',
             inputSchema: {
-                locationId: z.string().describe('The location ID'),
+                locationId: z.string().describe('The location ID')
             },
             annotations: {
                 title: 'Get Location Custom Fields',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().locations.getCustomFields({
-                    locationId: params.locationId,
+                    locationId: params.locationId
                 });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting custom fields: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting custom fields: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -308,28 +398,38 @@ export function registerLocationsTools(server: McpServer): void {
         {
             description: 'Get custom values for a location',
             inputSchema: {
-                locationId: z.string().describe('The location ID'),
+                locationId: z.string().describe('The location ID')
             },
             annotations: {
                 title: 'Get Location Custom Values',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().locations.getCustomValues({
-                    locationId: params.locationId,
+                    locationId: params.locationId
                 });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting custom values: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting custom values: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -343,17 +443,17 @@ export function registerLocationsTools(server: McpServer): void {
             inputSchema: {
                 locationId: z.string().describe('The location ID'),
                 name: z.string().describe('The custom value name'),
-                value: z.string().describe('The custom value'),
+                value: z.string().describe('The custom value')
             },
             annotations: {
                 title: 'Create Location Custom Value',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: false,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const { locationId, ...body } = params;
                 const result = await getGhlClient().locations.createCustomValue(
@@ -361,12 +461,22 @@ export function registerLocationsTools(server: McpServer): void {
                     stripUndefined(body)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error creating custom value: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error creating custom value: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -380,31 +490,51 @@ export function registerLocationsTools(server: McpServer): void {
             inputSchema: {
                 originId: z.string().describe('The origin ID'),
                 locationId: z.string().describe('The location ID'),
-                deleted: z.boolean().optional().describe('Include deleted templates'),
-                skip: z.string().optional().describe('Number of results to skip'),
-                limit: z.string().optional().describe('Maximum number of results'),
-                type: z.string().optional().describe('Filter by template type'),
+                deleted: z
+                    .boolean()
+                    .optional()
+                    .describe('Include deleted templates'),
+                skip: z
+                    .string()
+                    .optional()
+                    .describe('Number of results to skip'),
+                limit: z
+                    .string()
+                    .optional()
+                    .describe('Maximum number of results'),
+                type: z.string().optional().describe('Filter by template type')
             },
             annotations: {
                 title: 'Get Location Templates',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().locations.gETAllOrEmailSmsTemplates(
-                    stripUndefined(params)
-                );
+                const result =
+                    await getGhlClient().locations.gETAllOrEmailSmsTemplates(
+                        stripUndefined(params)
+                    );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting location templates: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting location templates: ${error.message}`
+                        }
+                    ]
                 };
             }
         }

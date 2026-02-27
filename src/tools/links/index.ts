@@ -14,26 +14,36 @@ export function registerLinksTools(server: McpServer): void {
         {
             description: 'Get links for a location',
             inputSchema: {
-                locationId: z.string().describe('The location ID'),
+                locationId: z.string().describe('The location ID')
             },
             annotations: {
                 title: 'List Links',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().links.getLinks(params);
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting links: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting links: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -47,26 +57,36 @@ export function registerLinksTools(server: McpServer): void {
             inputSchema: {
                 locationId: z.string().describe('The location ID'),
                 name: z.string().describe('The link name'),
-                redirectTo: z.string().describe('The URL to redirect to'),
+                redirectTo: z.string().describe('The URL to redirect to')
             },
             annotations: {
                 title: 'Create Link',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: false,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().links.createLink(params);
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error creating link: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error creating link: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -80,17 +100,20 @@ export function registerLinksTools(server: McpServer): void {
             inputSchema: {
                 linkId: z.string().describe('The link ID'),
                 name: z.string().optional().describe('The link name'),
-                redirectTo: z.string().optional().describe('The URL to redirect to'),
+                redirectTo: z
+                    .string()
+                    .optional()
+                    .describe('The URL to redirect to')
             },
             annotations: {
                 title: 'Update Link',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const { linkId, ...body } = params;
                 const result = await getGhlClient().links.updateLink(
@@ -98,12 +121,22 @@ export function registerLinksTools(server: McpServer): void {
                     stripUndefined(body)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error updating link: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error updating link: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -115,26 +148,36 @@ export function registerLinksTools(server: McpServer): void {
         {
             description: 'Delete a link',
             inputSchema: {
-                linkId: z.string().describe('The link ID'),
+                linkId: z.string().describe('The link ID')
             },
             annotations: {
                 title: 'Delete Link',
                 readOnlyHint: false,
                 destructiveHint: true,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().links.deleteLink(params);
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error deleting link: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error deleting link: ${error.message}`
+                        }
+                    ]
                 };
             }
         }

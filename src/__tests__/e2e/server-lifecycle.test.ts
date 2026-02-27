@@ -13,18 +13,18 @@ import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 const mockContacts = {
     searchContactsAdvanced: vi.fn().mockResolvedValue({
         contacts: [{ id: 'c-1', name: 'Alice' }],
-        total: 1,
+        total: 1
     }),
     getContact: vi.fn().mockResolvedValue({
-        contact: { id: 'c-1', firstName: 'Alice' },
+        contact: { id: 'c-1', firstName: 'Alice' }
     }),
     createContact: vi.fn().mockResolvedValue({
-        contact: { id: 'c-new' },
-    }),
+        contact: { id: 'c-new' }
+    })
 };
 
 vi.mock('../../ghl-client.js', () => ({
-    getGhlClient: () => ({ contacts: mockContacts }),
+    getGhlClient: () => ({ contacts: mockContacts })
 }));
 
 vi.mock('@cbnsndwch/ghl-sdk', () => {
@@ -41,11 +41,12 @@ async function createConnectedPair() {
     const server = createServer();
     const client = new Client({ name: 'test-client', version: '0.0.0' });
 
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    const [clientTransport, serverTransport] =
+        InMemoryTransport.createLinkedPair();
 
     await Promise.all([
         server.connect(serverTransport),
-        client.connect(clientTransport),
+        client.connect(clientTransport)
     ]);
 
     return { server, client, clientTransport, serverTransport };
@@ -81,7 +82,9 @@ describe('server lifecycle (e2e)', () => {
         expect(result.tools.length).toBeGreaterThan(0);
 
         // Verify that contacts_search is among the listed tools
-        const contactsSearch = result.tools.find((t) => t.name === 'contacts_search');
+        const contactsSearch = result.tools.find(
+            t => t.name === 'contacts_search'
+        );
         expect(contactsSearch).toBeDefined();
         expect(contactsSearch!.description).toBeTruthy();
         expect(contactsSearch!.inputSchema).toBeDefined();
@@ -90,7 +93,7 @@ describe('server lifecycle (e2e)', () => {
     it('tool listing includes annotations', async () => {
         const result = await client.listTools();
 
-        const contactsGet = result.tools.find((t) => t.name === 'contacts_get');
+        const contactsGet = result.tools.find(t => t.name === 'contacts_get');
         expect(contactsGet).toBeDefined();
         expect(contactsGet!.annotations).toBeDefined();
         expect(contactsGet!.annotations!.readOnlyHint).toBe(true);
@@ -99,19 +102,22 @@ describe('server lifecycle (e2e)', () => {
 
     it('client can call a tool and receive a result', async () => {
         mockContacts.getContact.mockResolvedValueOnce({
-            contact: { id: 'c-42', firstName: 'Bob' },
+            contact: { id: 'c-42', firstName: 'Bob' }
         });
 
         const result = await client.callTool({
             name: 'contacts_get',
-            arguments: { contactId: 'c-42' },
+            arguments: { contactId: 'c-42' }
         });
 
         expect(result.isError).toBeFalsy();
         expect(result.content).toBeDefined();
         expect(Array.isArray(result.content)).toBe(true);
 
-        const textContent = result.content as Array<{ type: string; text: string }>;
+        const textContent = result.content as Array<{
+            type: string;
+            text: string;
+        }>;
         expect(textContent[0]!.type).toBe('text');
 
         const parsed = JSON.parse(textContent[0]!.text);
@@ -124,22 +130,28 @@ describe('server lifecycle (e2e)', () => {
 
         const result = await client.callTool({
             name: 'contacts_get',
-            arguments: { contactId: 'bad-id' },
+            arguments: { contactId: 'bad-id' }
         });
 
         expect(result.isError).toBe(true);
-        const textContent = result.content as Array<{ type: string; text: string }>;
+        const textContent = result.content as Array<{
+            type: string;
+            text: string;
+        }>;
         expect(textContent[0]!.text).toContain('Not found');
     });
 
     it('calling a non-existent tool returns an error', async () => {
         const result = await client.callTool({
             name: 'nonexistent_tool',
-            arguments: {},
+            arguments: {}
         });
 
         expect(result.isError).toBe(true);
-        const textContent = result.content as Array<{ type: string; text: string }>;
+        const textContent = result.content as Array<{
+            type: string;
+            text: string;
+        }>;
         expect(textContent[0]!.text).toContain('nonexistent_tool');
     });
 });

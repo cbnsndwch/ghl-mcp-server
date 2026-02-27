@@ -17,28 +17,41 @@ export function registerBlogsTools(server: McpServer): void {
                 locationId: z.string().describe('The location ID'),
                 skip: z.number().describe('Number of records to skip'),
                 limit: z.number().describe('Maximum number of results'),
-                searchTerm: z.string().optional().describe('Search term to filter blogs'),
+                searchTerm: z
+                    .string()
+                    .optional()
+                    .describe('Search term to filter blogs')
             },
             annotations: {
                 title: 'List Blogs',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().blogs.getBlogs(
                     stripUndefined(params)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting blogs: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting blogs: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -52,28 +65,39 @@ export function registerBlogsTools(server: McpServer): void {
             inputSchema: {
                 locationId: z.string().describe('The location ID'),
                 limit: z.number().describe('Maximum number of results'),
-                offset: z.number().describe('Offset for pagination'),
+                offset: z.number().describe('Offset for pagination')
             },
             annotations: {
                 title: 'List Blog Authors',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().blogs.getAllBlogAuthorsByLocation(
-                    params
-                );
+                const result =
+                    await getGhlClient().blogs.getAllBlogAuthorsByLocation(
+                        params
+                    );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting blog authors: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting blog authors: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -87,28 +111,39 @@ export function registerBlogsTools(server: McpServer): void {
             inputSchema: {
                 locationId: z.string().describe('The location ID'),
                 limit: z.number().describe('Maximum number of results'),
-                offset: z.number().describe('Offset for pagination'),
+                offset: z.number().describe('Offset for pagination')
             },
             annotations: {
                 title: 'List Blog Categories',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().blogs.getAllCategoriesByLocation(
-                    params
-                );
+                const result =
+                    await getGhlClient().blogs.getAllCategoriesByLocation(
+                        params
+                    );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting blog categories: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting blog categories: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -124,29 +159,42 @@ export function registerBlogsTools(server: McpServer): void {
                 blogId: z.string().describe('The blog ID'),
                 limit: z.number().describe('Maximum number of results'),
                 offset: z.number().describe('Offset for pagination'),
-                searchTerm: z.string().optional().describe('Search term to filter posts'),
-                status: z.string().optional().describe('Filter by post status'),
+                searchTerm: z
+                    .string()
+                    .optional()
+                    .describe('Search term to filter posts'),
+                status: z.string().optional().describe('Filter by post status')
             },
             annotations: {
                 title: 'List Blog Posts',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().blogs.getBlogPost(
                     stripUndefined(params)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting blog posts: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting blog posts: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -170,29 +218,42 @@ export function registerBlogsTools(server: McpServer): void {
                 tags: z.array(z.string()).optional().describe('Tags'),
                 author: z.string().describe('Author ID or name'),
                 urlSlug: z.string().describe('URL slug'),
-                canonicalLink: z.string().optional().describe('Canonical link URL'),
-                publishedAt: z.string().describe('Published date (ISO string)'),
+                canonicalLink: z
+                    .string()
+                    .optional()
+                    .describe('Canonical link URL'),
+                publishedAt: z.string().describe('Published date (ISO string)')
             },
             annotations: {
                 title: 'Create Blog Post',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: false,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().blogs.createBlogPost(
                     stripUndefined(params)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error creating blog post: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error creating blog post: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -216,29 +277,42 @@ export function registerBlogsTools(server: McpServer): void {
                 tags: z.array(z.string()).optional().describe('Tags'),
                 author: z.string().describe('Author ID or name'),
                 urlSlug: z.string().describe('URL slug'),
-                canonicalLink: z.string().optional().describe('Canonical link URL'),
-                publishedAt: z.string().describe('Published date (ISO string)'),
+                canonicalLink: z
+                    .string()
+                    .optional()
+                    .describe('Canonical link URL'),
+                publishedAt: z.string().describe('Published date (ISO string)')
             },
             annotations: {
                 title: 'Update Blog Post',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().blogs.updateBlogPost(
                     stripUndefined(params)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error updating blog post: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error updating blog post: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -252,28 +326,41 @@ export function registerBlogsTools(server: McpServer): void {
             inputSchema: {
                 urlSlug: z.string().describe('The URL slug to check'),
                 locationId: z.string().describe('The location ID'),
-                postId: z.string().optional().describe('Existing post ID to exclude from check'),
+                postId: z
+                    .string()
+                    .optional()
+                    .describe('Existing post ID to exclude from check')
             },
             annotations: {
                 title: 'Check Blog URL Slug',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().blogs.checkUrlSlugExists(
                     stripUndefined(params)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error checking URL slug: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error checking URL slug: ${error.message}`
+                        }
+                    ]
                 };
             }
         }

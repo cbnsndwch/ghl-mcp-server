@@ -14,30 +14,45 @@ export function registerCustomFieldsTools(server: McpServer): void {
         {
             description: 'Get custom fields by object key for a location',
             inputSchema: {
-                objectKey: z.string().describe('The object key (e.g. "contact", "company")'),
-                locationId: z.string().describe('The location ID'),
+                objectKey: z
+                    .string()
+                    .describe('The object key (e.g. "contact", "company")'),
+                locationId: z.string().describe('The location ID')
             },
             annotations: {
                 title: 'List Custom Fields',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().customFields.getCustomFieldsByObjectKey({
-                    objectKey: params.objectKey,
-                    locationId: params.locationId,
-                });
+                const result =
+                    await getGhlClient().customFields.getCustomFieldsByObjectKey(
+                        {
+                            objectKey: params.objectKey,
+                            locationId: params.locationId
+                        }
+                    );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting custom fields: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting custom fields: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -51,7 +66,10 @@ export function registerCustomFieldsTools(server: McpServer): void {
             inputSchema: {
                 locationId: z.string().describe('The location ID'),
                 name: z.string().optional().describe('Custom field name'),
-                description: z.string().optional().describe('Custom field description'),
+                description: z
+                    .string()
+                    .optional()
+                    .describe('Custom field description'),
                 placeholder: z.string().optional().describe('Placeholder text'),
                 showInForms: z.boolean().describe('Whether to show in forms'),
                 dataType: z.string().describe('Data type of the custom field'),
@@ -59,33 +77,59 @@ export function registerCustomFieldsTools(server: McpServer): void {
                 objectKey: z.string().describe('The object key'),
                 parentId: z.string().describe('Parent folder ID'),
                 options: z
-                    .array(z.object({ key: z.string(), label: z.string(), url: z.string().optional() }))
+                    .array(
+                        z.object({
+                            key: z.string(),
+                            label: z.string(),
+                            url: z.string().optional()
+                        })
+                    )
                     .optional()
                     .describe('Options for selection fields'),
-                acceptedFormats: z.string().optional().describe('Accepted file formats'),
-                maxFileLimit: z.number().optional().describe('Maximum file upload limit'),
-                allowCustomOption: z.boolean().optional().describe('Allow custom options'),
+                acceptedFormats: z
+                    .string()
+                    .optional()
+                    .describe('Accepted file formats'),
+                maxFileLimit: z
+                    .number()
+                    .optional()
+                    .describe('Maximum file upload limit'),
+                allowCustomOption: z
+                    .boolean()
+                    .optional()
+                    .describe('Allow custom options')
             },
             annotations: {
                 title: 'Create Custom Field',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: false,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().customFields.createCustomField(
-                    stripUndefined(params) as any
-                );
+                const result =
+                    await getGhlClient().customFields.createCustomField(
+                        stripUndefined(params) as any
+                    );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error creating custom field: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error creating custom field: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -97,28 +141,39 @@ export function registerCustomFieldsTools(server: McpServer): void {
         {
             description: 'Get a custom field or folder by ID',
             inputSchema: {
-                id: z.string().describe('The custom field ID'),
+                id: z.string().describe('The custom field ID')
             },
             annotations: {
                 title: 'Get Custom Field',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().customFields.getCustomFieldById({
-                    id: params.id,
-                });
+                const result =
+                    await getGhlClient().customFields.getCustomFieldById({
+                        id: params.id
+                    });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting custom field: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting custom field: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -133,38 +188,64 @@ export function registerCustomFieldsTools(server: McpServer): void {
                 id: z.string().describe('The custom field ID'),
                 locationId: z.string().describe('The location ID'),
                 name: z.string().optional().describe('Custom field name'),
-                description: z.string().optional().describe('Custom field description'),
+                description: z
+                    .string()
+                    .optional()
+                    .describe('Custom field description'),
                 placeholder: z.string().optional().describe('Placeholder text'),
                 showInForms: z.boolean().describe('Whether to show in forms'),
                 options: z
-                    .array(z.object({ key: z.string(), label: z.string(), url: z.string().optional() }))
+                    .array(
+                        z.object({
+                            key: z.string(),
+                            label: z.string(),
+                            url: z.string().optional()
+                        })
+                    )
                     .optional()
                     .describe('Options for selection fields'),
-                acceptedFormats: z.string().optional().describe('Accepted file formats'),
-                maxFileLimit: z.number().optional().describe('Maximum file upload limit'),
+                acceptedFormats: z
+                    .string()
+                    .optional()
+                    .describe('Accepted file formats'),
+                maxFileLimit: z
+                    .number()
+                    .optional()
+                    .describe('Maximum file upload limit')
             },
             annotations: {
                 title: 'Update Custom Field',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const { id, ...body } = params;
-                const result = await getGhlClient().customFields.updateCustomField(
-                    { id },
-                    stripUndefined(body) as any
-                );
+                const result =
+                    await getGhlClient().customFields.updateCustomField(
+                        { id },
+                        stripUndefined(body) as any
+                    );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error updating custom field: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error updating custom field: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -176,28 +257,39 @@ export function registerCustomFieldsTools(server: McpServer): void {
         {
             description: 'Delete a custom field by ID',
             inputSchema: {
-                id: z.string().describe('The custom field ID'),
+                id: z.string().describe('The custom field ID')
             },
             annotations: {
                 title: 'Delete Custom Field',
                 readOnlyHint: false,
                 destructiveHint: true,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().customFields.deleteCustomField({
-                    id: params.id,
-                });
+                const result =
+                    await getGhlClient().customFields.deleteCustomField({
+                        id: params.id
+                    });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error deleting custom field: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error deleting custom field: ${error.message}`
+                        }
+                    ]
                 };
             }
         }

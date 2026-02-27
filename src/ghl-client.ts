@@ -7,7 +7,7 @@ let _client: HighLevel | null = null;
  */
 export function initGhlClient(privateIntegrationToken: string): HighLevel {
     _client = new HighLevel({
-        privateIntegrationToken,
+        privateIntegrationToken
     });
     return _client;
 }

@@ -88,14 +88,14 @@ The server module:
 ```typescript
 const ALL_REGISTRARS: ToolRegistrar[] = [
     registerContactsTools,
-    registerCalendarsTools,
+    registerCalendarsTools
     // ... 26 more
 ];
 
 export function createServer(): McpServer {
     const server = new McpServer(
         { name: 'ghl-mcp-server', version: '0.1.0' },
-        { capabilities: { tools: {} } },
+        { capabilities: { tools: {} } }
     );
     for (const registrar of ALL_REGISTRARS) {
         registrar(server);
@@ -130,25 +130,25 @@ server.registerTool(
     {
         description: 'Get a contact by ID',
         inputSchema: {
-            contactId: z.string().describe('The contact ID'),
+            contactId: z.string().describe('The contact ID')
         },
         annotations: {
             title: 'Get Contact',
             readOnlyHint: true,
             destructiveHint: false,
             idempotentHint: true,
-            openWorldHint: true,
-        },
+            openWorldHint: true
+        }
     },
-    async (params) => {
+    async params => {
         try {
             const result = await getGhlClient().contacts.getContact({
-                contactId: params.contactId,
+                contactId: params.contactId
             });
             return {
                 content: [
-                    { type: 'text', text: JSON.stringify(result, null, 2) },
-                ],
+                    { type: 'text', text: JSON.stringify(result, null, 2) }
+                ]
             };
         } catch (error: any) {
             return {
@@ -156,12 +156,12 @@ server.registerTool(
                 content: [
                     {
                         type: 'text',
-                        text: `Error getting contact: ${error.message}`,
-                    },
-                ],
+                        text: `Error getting contact: ${error.message}`
+                    }
+                ]
             };
         }
-    },
+    }
 );
 ```
 
@@ -236,7 +236,7 @@ The project uses TypeScript's `exactOptionalPropertyTypes` compiler option, whic
 ```typescript
 export function stripUndefined<T extends Record<string, any>>(obj: T) {
     return Object.fromEntries(
-        Object.entries(obj).filter(([, v]) => v !== undefined),
+        Object.entries(obj).filter(([, v]) => v !== undefined)
     );
 }
 ```
@@ -255,14 +255,14 @@ All tool handlers follow a consistent error handling pattern:
 try {
     const result = await getGhlClient().contacts.getContact({ contactId });
     return {
-        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }]
     };
 } catch (error: any) {
     return {
         isError: true,
         content: [
-            { type: 'text', text: `Error getting contact: ${error.message}` },
-        ],
+            { type: 'text', text: `Error getting contact: ${error.message}` }
+        ]
     };
 }
 ```

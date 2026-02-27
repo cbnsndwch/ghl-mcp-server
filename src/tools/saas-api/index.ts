@@ -12,32 +12,43 @@ export function registerSaasApiTools(server: McpServer): void {
     server.registerTool(
         'saas-api_get-locations',
         {
-            description: 'Get SaaS-activated locations for a company with pagination',
+            description:
+                'Get SaaS-activated locations for a company with pagination',
             inputSchema: {
                 companyId: z.string().describe('The company ID'),
-                page: z.number().describe('Page number for pagination'),
+                page: z.number().describe('Page number for pagination')
             },
             annotations: {
                 title: 'Get SaaS Locations',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().saasApi.getSaasLocations({
                     companyId: params.companyId,
-                    page: params.page,
+                    page: params.page
                 });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting SaaS locations: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting SaaS locations: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -50,29 +61,40 @@ export function registerSaasApiTools(server: McpServer): void {
             description: 'Get subscription details for a SaaS location',
             inputSchema: {
                 locationId: z.string().describe('The location ID'),
-                companyId: z.string().describe('The company ID'),
+                companyId: z.string().describe('The company ID')
             },
             annotations: {
                 title: 'Get SaaS Location Subscription',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().saasApi.getLocationSubscription({
-                    locationId: params.locationId,
-                    companyId: params.companyId,
-                });
+                const result =
+                    await getGhlClient().saasApi.getLocationSubscription({
+                        locationId: params.locationId,
+                        companyId: params.companyId
+                    });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting location subscription: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting location subscription: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -87,24 +109,33 @@ export function registerSaasApiTools(server: McpServer): void {
                 locationId: z.string().describe('The location ID'),
                 companyId: z.string().describe('The company ID'),
                 isSaaSV2: z.boolean().describe('Whether to use SaaS v2'),
-                stripeAccountId: z.string().optional().describe('Stripe account ID'),
+                stripeAccountId: z
+                    .string()
+                    .optional()
+                    .describe('Stripe account ID'),
                 name: z.string().optional().describe('Name'),
                 email: z.string().optional().describe('Email'),
-                stripeCustomerId: z.string().optional().describe('Stripe customer ID'),
+                stripeCustomerId: z
+                    .string()
+                    .optional()
+                    .describe('Stripe customer ID'),
                 contactId: z.string().optional().describe('Contact ID'),
-                providerLocationId: z.string().optional().describe('Provider location ID'),
+                providerLocationId: z
+                    .string()
+                    .optional()
+                    .describe('Provider location ID'),
                 description: z.string().optional().describe('Description'),
-                saasPlanId: z.string().optional().describe('SaaS plan ID'),
+                saasPlanId: z.string().optional().describe('SaaS plan ID')
             },
             annotations: {
                 title: 'Enable SaaS for Location',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const { locationId, ...body } = params;
                 const result = await getGhlClient().saasApi.enableSaasLocation(
@@ -112,12 +143,22 @@ export function registerSaasApiTools(server: McpServer): void {
                     stripUndefined(body) as any
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error enabling SaaS: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error enabling SaaS: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -131,18 +172,22 @@ export function registerSaasApiTools(server: McpServer): void {
             inputSchema: {
                 companyId: z.string().describe('The company ID'),
                 product: z.string().describe('The product identifier'),
-                locationIds: z.array(z.string()).describe('Array of location IDs'),
-                config: z.record(z.string(), z.any()).describe('Rebilling configuration object'),
+                locationIds: z
+                    .array(z.string())
+                    .describe('Array of location IDs'),
+                config: z
+                    .record(z.string(), z.any())
+                    .describe('Rebilling configuration object')
             },
             annotations: {
                 title: 'Update SaaS Rebilling',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const { companyId, ...body } = params;
                 const result = await getGhlClient().saasApi.updateRebilling(
@@ -150,12 +195,22 @@ export function registerSaasApiTools(server: McpServer): void {
                     stripUndefined(body) as any
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error updating rebilling: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error updating rebilling: ${error.message}`
+                        }
+                    ]
                 };
             }
         }

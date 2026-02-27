@@ -20,28 +20,39 @@ export function registerContactsTools(server: McpServer): void {
                     .optional()
                     .describe('Array of filter objects'),
                 page: z.number().optional().describe('Page number'),
-                pageLimit: z.number().optional().describe('Results per page'),
+                pageLimit: z.number().optional().describe('Results per page')
             },
             annotations: {
                 title: 'Search Contacts',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().contacts.searchContactsAdvanced(
-                    stripUndefined(params)
-                );
+                const result =
+                    await getGhlClient().contacts.searchContactsAdvanced(
+                        stripUndefined(params)
+                    );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error searching contacts: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error searching contacts: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -53,28 +64,38 @@ export function registerContactsTools(server: McpServer): void {
         {
             description: 'Get a contact by ID',
             inputSchema: {
-                contactId: z.string().describe('The contact ID'),
+                contactId: z.string().describe('The contact ID')
             },
             annotations: {
                 title: 'Get Contact',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().contacts.getContact({
-                    contactId: params.contactId,
+                    contactId: params.contactId
                 });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting contact: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting contact: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -107,28 +128,38 @@ export function registerContactsTools(server: McpServer): void {
                     .describe('Custom field values'),
                 source: z.string().optional().describe('Contact source'),
                 country: z.string().optional().describe('Country'),
-                companyName: z.string().optional().describe('Company name'),
+                companyName: z.string().optional().describe('Company name')
             },
             annotations: {
                 title: 'Create Contact',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: false,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().contacts.createContact(
                     stripUndefined(params)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error creating contact: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error creating contact: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -161,17 +192,17 @@ export function registerContactsTools(server: McpServer): void {
                     .describe('Custom field values'),
                 source: z.string().optional().describe('Contact source'),
                 country: z.string().optional().describe('Country'),
-                companyName: z.string().optional().describe('Company name'),
+                companyName: z.string().optional().describe('Company name')
             },
             annotations: {
                 title: 'Update Contact',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const { contactId, ...rest } = params;
                 const result = await getGhlClient().contacts.updateContact(
@@ -179,12 +210,22 @@ export function registerContactsTools(server: McpServer): void {
                     stripUndefined(rest)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error updating contact: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error updating contact: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -196,28 +237,38 @@ export function registerContactsTools(server: McpServer): void {
         {
             description: 'Delete a contact by ID',
             inputSchema: {
-                contactId: z.string().describe('The contact ID'),
+                contactId: z.string().describe('The contact ID')
             },
             annotations: {
                 title: 'Delete Contact',
                 readOnlyHint: false,
                 destructiveHint: true,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().contacts.deleteContact({
-                    contactId: params.contactId,
+                    contactId: params.contactId
                 });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error deleting contact: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error deleting contact: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -227,7 +278,8 @@ export function registerContactsTools(server: McpServer): void {
     server.registerTool(
         'contacts_upsert',
         {
-            description: 'Upsert a contact (create or update based on matching criteria)',
+            description:
+                'Upsert a contact (create or update based on matching criteria)',
             inputSchema: {
                 locationId: z.string().describe('The location ID'),
                 firstName: z.string().optional().describe('First name'),
@@ -250,28 +302,38 @@ export function registerContactsTools(server: McpServer): void {
                     .describe('Custom field values'),
                 source: z.string().optional().describe('Contact source'),
                 country: z.string().optional().describe('Country'),
-                companyName: z.string().optional().describe('Company name'),
+                companyName: z.string().optional().describe('Company name')
             },
             annotations: {
                 title: 'Upsert Contact',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: false,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().contacts.upsertContact(
                     stripUndefined(params)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error upserting contact: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error upserting contact: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -285,28 +347,39 @@ export function registerContactsTools(server: McpServer): void {
             inputSchema: {
                 locationId: z.string().describe('The location ID'),
                 number: z.string().optional().describe('Phone number to check'),
-                email: z.string().optional().describe('Email to check'),
+                email: z.string().optional().describe('Email to check')
             },
             annotations: {
                 title: 'Get Duplicate Contact',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().contacts.getDuplicateContact(
-                    stripUndefined(params)
-                );
+                const result =
+                    await getGhlClient().contacts.getDuplicateContact(
+                        stripUndefined(params)
+                    );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting duplicate contact: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting duplicate contact: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -320,30 +393,47 @@ export function registerContactsTools(server: McpServer): void {
             inputSchema: {
                 businessId: z.string().describe('The business ID'),
                 locationId: z.string().describe('The location ID'),
-                limit: z.string().optional().describe('Maximum number of results'),
-                skip: z.string().optional().describe('Number of results to skip'),
-                query: z.string().optional().describe('Search query'),
+                limit: z
+                    .string()
+                    .optional()
+                    .describe('Maximum number of results'),
+                skip: z
+                    .string()
+                    .optional()
+                    .describe('Number of results to skip'),
+                query: z.string().optional().describe('Search query')
             },
             annotations: {
                 title: 'Get Contacts by Business',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().contacts.getContactsByBusinessId(
-                    stripUndefined(params)
-                );
+                const result =
+                    await getGhlClient().contacts.getContactsByBusinessId(
+                        stripUndefined(params)
+                    );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting contacts by business: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting contacts by business: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -356,29 +446,39 @@ export function registerContactsTools(server: McpServer): void {
             description: 'Add tags to a contact',
             inputSchema: {
                 contactId: z.string().describe('The contact ID'),
-                tags: z.array(z.string()).describe('Tags to add'),
+                tags: z.array(z.string()).describe('Tags to add')
             },
             annotations: {
                 title: 'Add Tags to Contact',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: false,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().contacts.addTags(
                     { contactId: params.contactId },
                     { tags: params.tags }
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error adding tags: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error adding tags: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -391,29 +491,39 @@ export function registerContactsTools(server: McpServer): void {
             description: 'Remove tags from a contact',
             inputSchema: {
                 contactId: z.string().describe('The contact ID'),
-                tags: z.array(z.string()).describe('Tags to remove'),
+                tags: z.array(z.string()).describe('Tags to remove')
             },
             annotations: {
                 title: 'Remove Tags from Contact',
                 readOnlyHint: false,
                 destructiveHint: true,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().contacts.removeTags(
                     { contactId: params.contactId },
                     { tags: params.tags }
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error removing tags: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error removing tags: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -425,28 +535,38 @@ export function registerContactsTools(server: McpServer): void {
         {
             description: 'Get all tasks for a contact',
             inputSchema: {
-                contactId: z.string().describe('The contact ID'),
+                contactId: z.string().describe('The contact ID')
             },
             annotations: {
                 title: 'Get Contact Tasks',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().contacts.getAllTasks({
-                    contactId: params.contactId,
+                    contactId: params.contactId
                 });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting tasks: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting tasks: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -462,18 +582,23 @@ export function registerContactsTools(server: McpServer): void {
                 title: z.string().describe('Task title'),
                 body: z.string().optional().describe('Task body/description'),
                 dueDate: z.string().describe('Due date (ISO 8601)'),
-                completed: z.boolean().describe('Whether the task is completed'),
-                assignedTo: z.string().optional().describe('User ID to assign the task to'),
+                completed: z
+                    .boolean()
+                    .describe('Whether the task is completed'),
+                assignedTo: z
+                    .string()
+                    .optional()
+                    .describe('User ID to assign the task to')
             },
             annotations: {
                 title: 'Create Contact Task',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: false,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const { contactId, ...rest } = params;
                 const result = await getGhlClient().contacts.createTask(
@@ -481,12 +606,22 @@ export function registerContactsTools(server: McpServer): void {
                     stripUndefined(rest)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error creating task: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error creating task: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -498,28 +633,38 @@ export function registerContactsTools(server: McpServer): void {
         {
             description: 'Get all notes for a contact',
             inputSchema: {
-                contactId: z.string().describe('The contact ID'),
+                contactId: z.string().describe('The contact ID')
             },
             annotations: {
                 title: 'Get Contact Notes',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().contacts.getAllNotes({
-                    contactId: params.contactId,
+                    contactId: params.contactId
                 });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting notes: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting notes: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -533,17 +678,20 @@ export function registerContactsTools(server: McpServer): void {
             inputSchema: {
                 contactId: z.string().describe('The contact ID'),
                 body: z.string().describe('Note body'),
-                userId: z.string().optional().describe('User ID of the note author'),
+                userId: z
+                    .string()
+                    .optional()
+                    .describe('User ID of the note author')
             },
             annotations: {
                 title: 'Create Contact Note',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: false,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const { contactId, ...rest } = params;
                 const result = await getGhlClient().contacts.createNote(
@@ -551,12 +699,22 @@ export function registerContactsTools(server: McpServer): void {
                     stripUndefined(rest)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error creating note: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error creating note: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -569,29 +727,43 @@ export function registerContactsTools(server: McpServer): void {
             description: 'Add a contact to a campaign',
             inputSchema: {
                 contactId: z.string().describe('The contact ID'),
-                campaignId: z.string().describe('The campaign ID'),
+                campaignId: z.string().describe('The campaign ID')
             },
             annotations: {
                 title: 'Add Contact to Campaign',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: false,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().contacts.addContactToCampaign(
-                    { contactId: params.contactId, campaignId: params.campaignId },
-                    {}
-                );
+                const result =
+                    await getGhlClient().contacts.addContactToCampaign(
+                        {
+                            contactId: params.contactId,
+                            campaignId: params.campaignId
+                        },
+                        {}
+                    );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error adding contact to campaign: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error adding contact to campaign: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -604,29 +776,40 @@ export function registerContactsTools(server: McpServer): void {
             description: 'Remove a contact from a campaign',
             inputSchema: {
                 contactId: z.string().describe('The contact ID'),
-                campaignId: z.string().describe('The campaign ID'),
+                campaignId: z.string().describe('The campaign ID')
             },
             annotations: {
                 title: 'Remove Contact from Campaign',
                 readOnlyHint: false,
                 destructiveHint: true,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().contacts.removeContactFromCampaign({
-                    contactId: params.contactId,
-                    campaignId: params.campaignId,
-                });
+                const result =
+                    await getGhlClient().contacts.removeContactFromCampaign({
+                        contactId: params.contactId,
+                        campaignId: params.campaignId
+                    });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error removing contact from campaign: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error removing contact from campaign: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -640,29 +823,48 @@ export function registerContactsTools(server: McpServer): void {
             inputSchema: {
                 contactId: z.string().describe('The contact ID'),
                 workflowId: z.string().describe('The workflow ID'),
-                eventStartTime: z.string().optional().describe('Event start time (ISO 8601)'),
+                eventStartTime: z
+                    .string()
+                    .optional()
+                    .describe('Event start time (ISO 8601)')
             },
             annotations: {
                 title: 'Add Contact to Workflow',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: false,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().contacts.addContactToWorkflow(
-                    { contactId: params.contactId, workflowId: params.workflowId },
-                    stripUndefined({ eventStartTime: params.eventStartTime })
-                );
+                const result =
+                    await getGhlClient().contacts.addContactToWorkflow(
+                        {
+                            contactId: params.contactId,
+                            workflowId: params.workflowId
+                        },
+                        stripUndefined({
+                            eventStartTime: params.eventStartTime
+                        })
+                    );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error adding contact to workflow: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error adding contact to workflow: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -675,29 +877,42 @@ export function registerContactsTools(server: McpServer): void {
             description: 'Add followers to a contact',
             inputSchema: {
                 contactId: z.string().describe('The contact ID'),
-                followers: z.array(z.string()).describe('Array of user IDs to add as followers'),
+                followers: z
+                    .array(z.string())
+                    .describe('Array of user IDs to add as followers')
             },
             annotations: {
                 title: 'Add Followers to Contact',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: false,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().contacts.addFollowersContact(
-                    { contactId: params.contactId },
-                    { followers: params.followers }
-                );
+                const result =
+                    await getGhlClient().contacts.addFollowersContact(
+                        { contactId: params.contactId },
+                        { followers: params.followers }
+                    );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error adding followers: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error adding followers: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -710,29 +925,42 @@ export function registerContactsTools(server: McpServer): void {
             description: 'Remove followers from a contact',
             inputSchema: {
                 contactId: z.string().describe('The contact ID'),
-                followers: z.array(z.string()).describe('Array of user IDs to remove as followers'),
+                followers: z
+                    .array(z.string())
+                    .describe('Array of user IDs to remove as followers')
             },
             annotations: {
                 title: 'Remove Followers from Contact',
                 readOnlyHint: false,
                 destructiveHint: true,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().contacts.removeFollowersContact(
-                    { contactId: params.contactId },
-                    { followers: params.followers }
-                );
+                const result =
+                    await getGhlClient().contacts.removeFollowersContact(
+                        { contactId: params.contactId },
+                        { followers: params.followers }
+                    );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error removing followers: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error removing followers: ${error.message}`
+                        }
+                    ]
                 };
             }
         }

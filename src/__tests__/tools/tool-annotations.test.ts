@@ -5,7 +5,7 @@ import type { ToolAnnotations } from '@modelcontextprotocol/sdk/types.js';
 // Mock the GHL SDK so tool registrars don't need a real client
 vi.mock('@cbnsndwch/ghl-sdk', () => {
     class HighLevel {
-        constructor(_config: unknown) { }
+        constructor(_config: unknown) {}
     }
     return { HighLevel };
 });
@@ -59,10 +59,7 @@ describe('tool annotations', () => {
             // Title may be stored at tool.title (top-level config) or
             // inside tool.annotations.title depending on how it was registered.
             const title = tool.title ?? (tool.annotations as any)?.title;
-            expect(
-                title,
-                `Tool "${name}" should have a title`
-            ).toBeTruthy();
+            expect(title, `Tool "${name}" should have a title`).toBeTruthy();
         }
     });
 
@@ -96,7 +93,8 @@ describe('tool annotations', () => {
 
     it('non-read-only tools do not have readOnlyHint: true', () => {
         // Tools that mutate (create, update, delete, add, remove, upsert) should NOT be read-only
-        const mutationPatterns = /_(create|update|delete|add|remove|upsert|set|enable|disable)/i;
+        const mutationPatterns =
+            /_(create|update|delete|add|remove|upsert|set|enable|disable)/i;
 
         for (const [name, tool] of toolEntries) {
             if (mutationPatterns.test(name)) {

@@ -14,28 +14,38 @@ export function registerUsersTools(server: McpServer): void {
         {
             description: 'Get a user by ID',
             inputSchema: {
-                userId: z.string().describe('The user ID'),
+                userId: z.string().describe('The user ID')
             },
             annotations: {
                 title: 'Get User',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().users.getUser({
-                    userId: params.userId,
+                    userId: params.userId
                 });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting user: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting user: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -48,37 +58,62 @@ export function registerUsersTools(server: McpServer): void {
             description: 'Search users',
             inputSchema: {
                 companyId: z.string().describe('The company ID'),
-                locationId: z.string().optional().describe('Filter by location ID'),
+                locationId: z
+                    .string()
+                    .optional()
+                    .describe('Filter by location ID'),
                 query: z.string().optional().describe('Search query string'),
-                limit: z.string().optional().describe('Maximum number of results'),
-                skip: z.string().optional().describe('Number of results to skip'),
+                limit: z
+                    .string()
+                    .optional()
+                    .describe('Maximum number of results'),
+                skip: z
+                    .string()
+                    .optional()
+                    .describe('Number of results to skip'),
                 type: z.string().optional().describe('User type filter'),
                 role: z.string().optional().describe('User role filter'),
                 ids: z.string().optional().describe('Comma-separated user IDs'),
                 sort: z.string().optional().describe('Sort field'),
-                sortDirection: z.string().optional().describe('Sort direction (asc or desc)'),
-                enabled2waySync: z.boolean().optional().describe('Filter by 2-way sync enabled'),
+                sortDirection: z
+                    .string()
+                    .optional()
+                    .describe('Sort direction (asc or desc)'),
+                enabled2waySync: z
+                    .boolean()
+                    .optional()
+                    .describe('Filter by 2-way sync enabled')
             },
             annotations: {
                 title: 'Search Users',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().users.searchUsers(
                     stripUndefined(params)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error searching users: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error searching users: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -97,28 +132,41 @@ export function registerUsersTools(server: McpServer): void {
                 type: z.string().optional().describe('User type'),
                 role: z.string().optional().describe('User role'),
                 companyId: z.string().optional().describe('Company ID'),
-                locationIds: z.array(z.string()).optional().describe('Location IDs'),
+                locationIds: z
+                    .array(z.string())
+                    .optional()
+                    .describe('Location IDs')
             },
             annotations: {
                 title: 'Update User',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().users.updateUser(
                     stripUndefined(params)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error updating user: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error updating user: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -135,19 +183,29 @@ export function registerUsersTools(server: McpServer): void {
                 readOnlyHint: false,
                 destructiveHint: true,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
         async () => {
             try {
                 const result = await getGhlClient().users.deleteUser();
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error deleting user: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error deleting user: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -167,28 +225,40 @@ export function registerUsersTools(server: McpServer): void {
                 phone: z.string().optional().describe('Phone number'),
                 type: z.string().describe('User type'),
                 role: z.string().describe('User role'),
-                locationIds: z.array(z.string()).describe('Location IDs to assign'),
+                locationIds: z
+                    .array(z.string())
+                    .describe('Location IDs to assign')
             },
             annotations: {
                 title: 'Create User',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: false,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().users.createUser(
                     stripUndefined(params)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error creating user: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error creating user: ${error.message}`
+                        }
+                    ]
                 };
             }
         }

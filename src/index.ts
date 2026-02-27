@@ -8,7 +8,7 @@ async function main() {
     if (!token) {
         console.error(
             'Missing GHL_PRIVATE_TOKEN environment variable. ' +
-            'Set it to your HighLevel Private Integration token.'
+                'Set it to your HighLevel Private Integration token.'
         );
         process.exit(1);
     }

@@ -20,10 +20,10 @@ function makeDummyRegistrar(prefix: string, count: number): ToolRegistrar {
             server.registerTool(
                 `${prefix}_tool_${i}`,
                 {
-                    description: `Dummy tool ${i} in ${prefix}`,
+                    description: `Dummy tool ${i} in ${prefix}`
                 },
                 async () => ({
-                    content: [{ type: 'text' as const, text: 'ok' }],
+                    content: [{ type: 'text' as const, text: 'ok' }]
                 })
             );
         }
@@ -34,12 +34,12 @@ function makeEntries(): CategoryEntry[] {
     return [
         {
             meta: { name: 'alpha', label: 'Alpha', description: 'Alpha tools' },
-            registrar: makeDummyRegistrar('alpha', 3),
+            registrar: makeDummyRegistrar('alpha', 3)
         },
         {
             meta: { name: 'beta', label: 'Beta', description: 'Beta tools' },
-            registrar: makeDummyRegistrar('beta', 2),
-        },
+            registrar: makeDummyRegistrar('beta', 2)
+        }
     ];
 }
 
@@ -63,7 +63,9 @@ describe('ToolCatalog', () => {
         // Alpha and beta tools should be disabled
         for (const [name, tool] of Object.entries(registeredTools)) {
             if (name.startsWith('alpha_') || name.startsWith('beta_')) {
-                expect(tool.enabled, `Tool "${name}" should be disabled`).toBe(false);
+                expect(tool.enabled, `Tool "${name}" should be disabled`).toBe(
+                    false
+                );
             }
         }
     });
@@ -87,15 +89,19 @@ describe('ToolCatalog', () => {
 
         expect(list).toHaveLength(2);
 
-        const alpha = list.find((c) => c.name === 'alpha');
+        const alpha = list.find(c => c.name === 'alpha');
         expect(alpha).toBeDefined();
         expect(alpha!.label).toBe('Alpha');
         expect(alpha!.description).toBe('Alpha tools');
         expect(alpha!.toolCount).toBe(3);
         expect(alpha!.enabled).toBe(false);
-        expect(alpha!.tools).toEqual(['alpha_tool_1', 'alpha_tool_2', 'alpha_tool_3']);
+        expect(alpha!.tools).toEqual([
+            'alpha_tool_1',
+            'alpha_tool_2',
+            'alpha_tool_3'
+        ]);
 
-        const beta = list.find((c) => c.name === 'beta');
+        const beta = list.find(c => c.name === 'beta');
         expect(beta).toBeDefined();
         expect(beta!.toolCount).toBe(2);
     });
@@ -110,7 +116,11 @@ describe('ToolCatalog', () => {
 
         // Enable alpha
         const affected = catalog.setCategory('alpha', true);
-        expect(affected).toEqual(['alpha_tool_1', 'alpha_tool_2', 'alpha_tool_3']);
+        expect(affected).toEqual([
+            'alpha_tool_1',
+            'alpha_tool_2',
+            'alpha_tool_3'
+        ]);
 
         // Alpha tools should be enabled
         expect(registeredTools['alpha_tool_1']?.enabled).toBe(true);
@@ -123,8 +133,8 @@ describe('ToolCatalog', () => {
 
         // Category list reflects the change
         const list = catalog.getCategoryList();
-        expect(list.find((c) => c.name === 'alpha')!.enabled).toBe(true);
-        expect(list.find((c) => c.name === 'beta')!.enabled).toBe(false);
+        expect(list.find(c => c.name === 'alpha')!.enabled).toBe(true);
+        expect(list.find(c => c.name === 'beta')!.enabled).toBe(false);
     });
 
     it('setCategory disables tools', () => {
@@ -162,9 +172,10 @@ describe('ToolCatalog', () => {
         catalog.enableAll();
 
         for (const [name, tool] of Object.entries(registeredTools)) {
-            expect(tool.enabled, `Tool "${name}" should be enabled after enableAll()`).toBe(
-                true
-            );
+            expect(
+                tool.enabled,
+                `Tool "${name}" should be enabled after enableAll()`
+            ).toBe(true);
         }
 
         const list = catalog.getCategoryList();
@@ -196,7 +207,10 @@ describe('ToolCatalog', () => {
     it('total registered tools = category tools + meta-tools', () => {
         const server = new McpServer({ name: 'test', version: '0.0.1' });
         const _catalog = new ToolCatalog(server, makeEntries());
-        const registeredTools = (server as any)._registeredTools as Record<string, unknown>;
+        const registeredTools = (server as any)._registeredTools as Record<
+            string,
+            unknown
+        >;
         const toolNames = Object.keys(registeredTools);
 
         // 3 (alpha) + 2 (beta) + 2 (meta) = 7

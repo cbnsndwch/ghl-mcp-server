@@ -13,28 +13,39 @@ export function registerAssociationsTools(server: McpServer): void {
         {
             description: 'Get an association by ID',
             inputSchema: {
-                associationId: z.string().describe('The association ID'),
+                associationId: z.string().describe('The association ID')
             },
             annotations: {
                 title: 'Get Association',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().associations.getAssociationByID({
-                    associationId: params.associationId,
-                });
+                const result =
+                    await getGhlClient().associations.getAssociationByID({
+                        associationId: params.associationId
+                    });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting association: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting association: ${error.message}`
+                        }
+                    ]
                 };
             }
         }

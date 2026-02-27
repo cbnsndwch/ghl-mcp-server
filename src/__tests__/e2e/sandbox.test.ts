@@ -25,11 +25,12 @@ async function createSandboxPair() {
     const server = createServer();
     const client = new Client({ name: 'sandbox-test', version: '0.0.0' });
 
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    const [clientTransport, serverTransport] =
+        InMemoryTransport.createLinkedPair();
 
     await Promise.all([
         server.connect(serverTransport),
-        client.connect(clientTransport),
+        client.connect(clientTransport)
     ]);
 
     return { server, client };
@@ -64,7 +65,7 @@ describe.skipIf(!SANDBOX_TOKEN)('sandbox e2e', () => {
                 try {
                     await client.callTool({
                         name: 'contacts_delete',
-                        arguments: { contactId },
+                        arguments: { contactId }
                     });
                 } catch {
                     // Ignore cleanup errors
@@ -82,12 +83,15 @@ describe.skipIf(!SANDBOX_TOKEN)('sandbox e2e', () => {
             arguments: {
                 locationId: LOCATION_ID,
                 page: 1,
-                pageLimit: 5,
-            },
+                pageLimit: 5
+            }
         });
 
         expect(result.isError).toBeFalsy();
-        const textContent = result.content as Array<{ type: string; text: string }>;
+        const textContent = result.content as Array<{
+            type: string;
+            text: string;
+        }>;
         const parsed = JSON.parse(textContent[0]!.text);
         expect(parsed).toBeDefined();
     });
@@ -102,8 +106,8 @@ describe.skipIf(!SANDBOX_TOKEN)('sandbox e2e', () => {
                 locationId: LOCATION_ID,
                 firstName: 'Test',
                 lastName: 'Sandbox',
-                email: `sandbox-${Date.now()}@test.example.com`,
-            },
+                email: `sandbox-${Date.now()}@test.example.com`
+            }
         });
 
         expect(createResult.isError).toBeFalsy();
@@ -119,7 +123,7 @@ describe.skipIf(!SANDBOX_TOKEN)('sandbox e2e', () => {
         // Delete
         const deleteResult = await c.callTool({
             name: 'contacts_delete',
-            arguments: { contactId },
+            arguments: { contactId }
         });
 
         expect(deleteResult.isError).toBeFalsy();
@@ -134,11 +138,14 @@ describe.skipIf(!SANDBOX_TOKEN)('sandbox e2e', () => {
 
         const result = await c.callTool({
             name: 'calendars_list',
-            arguments: { locationId: LOCATION_ID },
+            arguments: { locationId: LOCATION_ID }
         });
 
         expect(result.isError).toBeFalsy();
-        const textContent = result.content as Array<{ type: string; text: string }>;
+        const textContent = result.content as Array<{
+            type: string;
+            text: string;
+        }>;
         const parsed = JSON.parse(textContent[0]!.text);
         expect(parsed).toBeDefined();
     });
@@ -148,11 +155,14 @@ describe.skipIf(!SANDBOX_TOKEN)('sandbox e2e', () => {
 
         const result = await c.callTool({
             name: 'conversations_search',
-            arguments: { locationId: LOCATION_ID },
+            arguments: { locationId: LOCATION_ID }
         });
 
         expect(result.isError).toBeFalsy();
-        const textContent = result.content as Array<{ type: string; text: string }>;
+        const textContent = result.content as Array<{
+            type: string;
+            text: string;
+        }>;
         const parsed = JSON.parse(textContent[0]!.text);
         expect(parsed).toBeDefined();
     });

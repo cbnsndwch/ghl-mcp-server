@@ -14,28 +14,39 @@ export function registerBusinessesTools(server: McpServer): void {
         {
             description: 'Get businesses for a location',
             inputSchema: {
-                locationId: z.string().describe('The location ID'),
+                locationId: z.string().describe('The location ID')
             },
             annotations: {
                 title: 'List Businesses',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().businesses.getBusinessesByLocation({
-                    locationId: params.locationId,
-                });
+                const result =
+                    await getGhlClient().businesses.getBusinessesByLocation({
+                        locationId: params.locationId
+                    });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting businesses: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting businesses: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -57,28 +68,41 @@ export function registerBusinessesTools(server: McpServer): void {
                 state: z.string().optional().describe('State'),
                 postalCode: z.string().optional().describe('Postal code'),
                 country: z.string().optional().describe('Country'),
-                description: z.string().optional().describe('Business description'),
+                description: z
+                    .string()
+                    .optional()
+                    .describe('Business description')
             },
             annotations: {
                 title: 'Create Business',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: false,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().businesses.createBusiness(
                     stripUndefined(params)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error creating business: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error creating business: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -90,28 +114,38 @@ export function registerBusinessesTools(server: McpServer): void {
         {
             description: 'Get a business by ID',
             inputSchema: {
-                businessId: z.string().describe('The business ID'),
+                businessId: z.string().describe('The business ID')
             },
             annotations: {
                 title: 'Get Business',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().businesses.getBusiness({
-                    businessId: params.businessId,
+                    businessId: params.businessId
                 });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting business: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting business: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -133,17 +167,20 @@ export function registerBusinessesTools(server: McpServer): void {
                 state: z.string().optional().describe('State'),
                 postalCode: z.string().optional().describe('Postal code'),
                 country: z.string().optional().describe('Country'),
-                description: z.string().optional().describe('Business description'),
+                description: z
+                    .string()
+                    .optional()
+                    .describe('Business description')
             },
             annotations: {
                 title: 'Update Business',
                 readOnlyHint: false,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const { businessId, ...body } = params;
                 const result = await getGhlClient().businesses.updateBusiness(
@@ -151,12 +188,22 @@ export function registerBusinessesTools(server: McpServer): void {
                     stripUndefined(body)
                 );
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error updating business: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error updating business: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -168,28 +215,38 @@ export function registerBusinessesTools(server: McpServer): void {
         {
             description: 'Delete a business by ID',
             inputSchema: {
-                businessId: z.string().describe('The business ID'),
+                businessId: z.string().describe('The business ID')
             },
             annotations: {
                 title: 'Delete Business',
                 readOnlyHint: false,
                 destructiveHint: true,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().businesses.deleteBusiness({
-                    businessId: params.businessId,
+                    businessId: params.businessId
                 });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error deleting business: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error deleting business: ${error.message}`
+                        }
+                    ]
                 };
             }
         }

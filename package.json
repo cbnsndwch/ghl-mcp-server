@@ -1,9 +1,9 @@
 {
     "name": "@cbnsndwch/ghl-mcp-server",
-    "description": "(Unofficial) MCP Server for the GHL API",
     "version": "0.1.0",
-    "type": "module",
+    "description": "(Unofficial) MCP Server for the GHL API",
     "license": "MIT",
+    "type": "module",
     "main": "dist/index.js",
     "scripts": {
         "build": "tsup",

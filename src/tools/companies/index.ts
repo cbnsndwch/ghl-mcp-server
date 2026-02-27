@@ -13,28 +13,38 @@ export function registerCompaniesTools(server: McpServer): void {
         {
             description: 'Get a company by ID',
             inputSchema: {
-                companyId: z.string().describe('The company ID'),
+                companyId: z.string().describe('The company ID')
             },
             annotations: {
                 title: 'Get Company',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
                 const result = await getGhlClient().companies.getCompany({
-                    companyId: params.companyId,
+                    companyId: params.companyId
                 });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting company: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting company: ${error.message}`
+                        }
+                    ]
                 };
             }
         }

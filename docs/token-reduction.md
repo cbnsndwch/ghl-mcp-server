@@ -8,17 +8,17 @@ The GHL MCP server currently registers **~158 tools across 28 groups**. When an 
 
 A typical tool definition with name, description, parameter schema (3–6 params with descriptions), and annotations occupies **~150–300 tokens** in serialized JSON Schema form. For 158 tools:
 
-| Metric | Low Estimate | High Estimate |
-|---|---|---|
-| Tokens per tool | 150 | 300 |
-| Total tools | 158 | 158 |
+| Metric                   | Low Estimate       | High Estimate      |
+| ------------------------ | ------------------ | ------------------ |
+| Tokens per tool          | 150                | 300                |
+| Total tools              | 158                | 158                |
 | **Initial context cost** | **~23,700 tokens** | **~47,400 tokens** |
 
 This context is injected into every LLM turn, even when the user only needs 1–2 API categories. At $15/M input tokens (Claude Opus), this adds **$0.35–$0.71 per conversation** in wasted context, and degrades tool-selection accuracy as the model must choose from 158 options.
 
 ### Current Architecture
 
-```
+```plain
 server.ts
   └─ createServer()
        └─ for (registrar of ALL_REGISTRARS) { registrar(server); }
@@ -67,12 +67,12 @@ Each `ToolRegistrar` is a function `(server: McpServer) => void` that imperative
 
 **Client Compatibility:**
 
-| Client | `tools/list_changed` Support |
-|---|---|
-| Claude Desktop | ✅ Yes |
-| Cursor | ✅ Yes |
-| VS Code Copilot | ✅ Yes |
-| Continue.dev | ✅ Yes |
+| Client              | `tools/list_changed` Support         |
+| ------------------- | ------------------------------------ |
+| Claude Desktop      | ✅ Yes                               |
+| Cursor              | ✅ Yes                               |
+| VS Code Copilot     | ✅ Yes                               |
+| Continue.dev        | ✅ Yes                               |
 | Generic MCP clients | Varies — fallback: all tools enabled |
 
 ---
@@ -118,14 +118,20 @@ Each `ToolRegistrar` is a function `(server: McpServer) => void` that imperative
 
 ```json
 {
-  "name": "contacts_search",
-  "description": "Search contacts with advanced filters including custom field values, tags, and date ranges",
-  "inputSchema": {
-    "properties": {
-      "locationId": { "type": "string", "description": "The unique identifier of the location/sub-account" },
-      "page": { "type": "number", "description": "The page number for pagination (1-indexed)" }
+    "name": "contacts_search",
+    "description": "Search contacts with advanced filters including custom field values, tags, and date ranges",
+    "inputSchema": {
+        "properties": {
+            "locationId": {
+                "type": "string",
+                "description": "The unique identifier of the location/sub-account"
+            },
+            "page": {
+                "type": "number",
+                "description": "The page number for pagination (1-indexed)"
+            }
+        }
     }
-  }
 }
 ```
 
@@ -133,15 +139,15 @@ Each `ToolRegistrar` is a function `(server: McpServer) => void` that imperative
 
 ```json
 {
-  "name": "contacts_search",
-  "title": "Search Contacts",
-  "description": "Advanced contact search with filters",
-  "inputSchema": {
-    "properties": {
-      "locationId": { "type": "string", "description": "Location ID" },
-      "page": { "type": "number" }
+    "name": "contacts_search",
+    "title": "Search Contacts",
+    "description": "Advanced contact search with filters",
+    "inputSchema": {
+        "properties": {
+            "locationId": { "type": "string", "description": "Location ID" },
+            "page": { "type": "number" }
+        }
     }
-  }
 }
 ```
 
@@ -178,14 +184,14 @@ Each `ToolRegistrar` is a function `(server: McpServer) => void` that imperative
 ```typescript
 // Model calls:
 ghl_execute({
-  code: `
+    code: `
     const contacts = await ghl.contacts.searchContactsAdvanced({
       locationId: "loc_123",
       filters: [{ field: "email", operator: "contains", value: "@acme.com" }]
     });
     return contacts;
   `
-})
+});
 ```
 
 **Token Savings:**
@@ -259,8 +265,8 @@ Implement the `ToolCatalog` pattern:
 
 1. All 158 tools are registered at startup but **disabled by default**
 2. Two meta-tools are always enabled:
-   - `ghl_list_categories` — Returns available categories with tool counts and descriptions
-   - `ghl_enable_category` — Enables all tools in a category (or disables to free context)
+    - `ghl_list_categories` — Returns available categories with tool counts and descriptions
+    - `ghl_enable_category` — Enables all tools in a category (or disables to free context)
 3. The SDK's `tools/list_changed` notification informs compliant clients
 4. Include a **fallback mode** for clients that don't support `tools/list_changed`: an environment variable `GHL_ENABLE_ALL_TOOLS=true` that skips the discovery pattern
 
@@ -291,43 +297,43 @@ After Phase 1, optimize the per-tool token cost:
 
 **Files to create/modify:**
 
-| File | Action |
-|---|---|
-| `src/discovery.ts` | NEW — `ToolCatalog` class + meta-tool definitions |
-| `src/server.ts` | MODIFY — Use `ToolCatalog` instead of direct registration |
-| `src/tools/types.ts` | MODIFY — Add `CategoryMetadata` type |
+| File                 | Action                                                    |
+| -------------------- | --------------------------------------------------------- |
+| `src/discovery.ts`   | NEW — `ToolCatalog` class + meta-tool definitions         |
+| `src/server.ts`      | MODIFY — Use `ToolCatalog` instead of direct registration |
+| `src/tools/types.ts` | MODIFY — Add `CategoryMetadata` type                      |
 
 **Step-by-step:**
 
 1. **Define category metadata** in each tool registrar (or a central map):
 
-   ```typescript
-   interface CategoryMetadata {
-     name: string;         // e.g., 'contacts'
-     label: string;        // e.g., 'Contacts'
-     description: string;  // e.g., 'Create, search, update, and manage contacts'
-     toolCount: number;    // Computed at registration time
-   }
-   ```
+    ```typescript
+    interface CategoryMetadata {
+        name: string; // e.g., 'contacts'
+        label: string; // e.g., 'Contacts'
+        description: string; // e.g., 'Create, search, update, and manage contacts'
+        toolCount: number; // Computed at registration time
+    }
+    ```
 
 2. **Create `ToolCatalog`** class:
-   - Accepts `McpServer` + array of `{ category: CategoryMetadata, registrar: ToolRegistrar }`
-   - Calls each registrar to register tools on the server
-   - Tracks returned `RegisteredTool` handles per category
-   - Disables all tools initially
-   - Registers the 2 meta-tools (always enabled)
+    - Accepts `McpServer` + array of `{ category: CategoryMetadata, registrar: ToolRegistrar }`
+    - Calls each registrar to register tools on the server
+    - Tracks returned `RegisteredTool` handles per category
+    - Disables all tools initially
+    - Registers the 2 meta-tools (always enabled)
 
 3. **`ghl_list_categories` meta-tool:**
-   - Returns JSON array of categories with name, description, tool count, and enabled status
-   - Read-only, idempotent
+    - Returns JSON array of categories with name, description, tool count, and enabled status
+    - Read-only, idempotent
 
 4. **`ghl_enable_category` meta-tool:**
-   - Input: `{ category: string, enabled?: boolean }`
-   - Enables/disables all tools in the specified category
-   - Returns confirmation with list of affected tool names
+    - Input: `{ category: string, enabled?: boolean }`
+    - Enables/disables all tools in the specified category
+    - Returns confirmation with list of affected tool names
 
 5. **Fallback mode:**
-   - `GHL_ENABLE_ALL_TOOLS=true` env var → skip disable step, register everything as enabled
+    - `GHL_ENABLE_ALL_TOOLS=true` env var → skip disable step, register everything as enabled
 
 **Estimated effort:** 2–4 hours
 
@@ -350,12 +356,12 @@ After Phase 1, optimize the per-tool token cost:
 
 ## Summary
 
-| Approach | Token Savings | Feasibility | Complexity | Recommended |
-|---|---|---|---|---|
-| Dynamic Tool Discovery | 85–97% | ✅ Full SDK support | Low | ✅ **Phase 1** |
-| Condensed Descriptions | 30–40% | ✅ No changes needed | Low | ✅ **Phase 2** |
-| Tool Pagination | ~0% | ⚠️ Partial | Medium | ❌ |
-| Hybrid Code Mode | 80–90% | ⚠️ Security concerns | High | ⚠️ Phase 3 |
-| Lazy Manifests | ~60% theoretical | ❌ Models need schemas | N/A | ❌ |
+| Approach               | Token Savings    | Feasibility            | Complexity | Recommended    |
+| ---------------------- | ---------------- | ---------------------- | ---------- | -------------- |
+| Dynamic Tool Discovery | 85–97%           | ✅ Full SDK support    | Low        | ✅ **Phase 1** |
+| Condensed Descriptions | 30–40%           | ✅ No changes needed   | Low        | ✅ **Phase 2** |
+| Tool Pagination        | ~0%              | ⚠️ Partial             | Medium     | ❌             |
+| Hybrid Code Mode       | 80–90%           | ⚠️ Security concerns   | High       | ⚠️ Phase 3     |
+| Lazy Manifests         | ~60% theoretical | ❌ Models need schemas | N/A        | ❌             |
 
 **The recommended combined strategy (Phase 1 + 2) achieves 90–98% token reduction** while maintaining full compatibility with the MCP protocol and existing clients.

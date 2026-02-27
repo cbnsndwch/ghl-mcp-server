@@ -30,7 +30,10 @@ describe('createServer', () => {
 
     it('registers all 28 tool groups (tools are present)', () => {
         const server = createServer();
-        const registeredTools = (server as any)._registeredTools as Record<string, unknown>;
+        const registeredTools = (server as any)._registeredTools as Record<
+            string,
+            unknown
+        >;
         const toolNames = Object.keys(registeredTools);
 
         // There should be a significant number of tools registered (28 groups, each with 1+ tools)
@@ -65,11 +68,13 @@ describe('createServer', () => {
             'snapshots_',
             'associations_',
             'objects_',
-            'saas-api_',
+            'saas-api_'
         ];
 
         for (const prefix of expectedPrefixes) {
-            const hasToolsWithPrefix = toolNames.some((name) => name.startsWith(prefix));
+            const hasToolsWithPrefix = toolNames.some(name =>
+                name.startsWith(prefix)
+            );
             expect(
                 hasToolsWithPrefix,
                 `Expected at least one tool starting with "${prefix}"`
@@ -85,7 +90,10 @@ describe('createServer', () => {
         >;
 
         for (const [name, tool] of Object.entries(registeredTools)) {
-            expect(tool.description, `Tool "${name}" should have a description`).toBeTruthy();
+            expect(
+                tool.description,
+                `Tool "${name}" should have a description`
+            ).toBeTruthy();
         }
     });
 });

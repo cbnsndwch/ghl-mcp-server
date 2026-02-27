@@ -13,28 +13,39 @@ export function registerSnapshotsTools(server: McpServer): void {
         {
             description: 'Get snapshots for a company',
             inputSchema: {
-                companyId: z.string().describe('The company ID'),
+                companyId: z.string().describe('The company ID')
             },
             annotations: {
                 title: 'List Snapshots',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().snapshots.getCustomSnapshots({
-                    companyId: params.companyId,
-                });
+                const result =
+                    await getGhlClient().snapshots.getCustomSnapshots({
+                        companyId: params.companyId
+                    });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting snapshots: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting snapshots: ${error.message}`
+                        }
+                    ]
                 };
             }
         }
@@ -48,30 +59,41 @@ export function registerSnapshotsTools(server: McpServer): void {
             inputSchema: {
                 companyId: z.string().describe('The company ID'),
                 snapshotId: z.string().describe('The snapshot ID'),
-                locationId: z.string().describe('The location ID'),
+                locationId: z.string().describe('The location ID')
             },
             annotations: {
                 title: 'Get Snapshot Push Status',
                 readOnlyHint: true,
                 destructiveHint: false,
                 idempotentHint: true,
-                openWorldHint: true,
-            },
+                openWorldHint: true
+            }
         },
-        async (params) => {
+        async params => {
             try {
-                const result = await getGhlClient().snapshots.getLatestSnapshotPush({
-                    companyId: params.companyId,
-                    snapshotId: params.snapshotId,
-                    locationId: params.locationId,
-                });
+                const result =
+                    await getGhlClient().snapshots.getLatestSnapshotPush({
+                        companyId: params.companyId,
+                        snapshotId: params.snapshotId,
+                        locationId: params.locationId
+                    });
                 return {
-                    content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: JSON.stringify(result, null, 2)
+                        }
+                    ]
                 };
             } catch (error: any) {
                 return {
                     isError: true,
-                    content: [{ type: 'text' as const, text: `Error getting snapshot push status: ${error.message}` }],
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: `Error getting snapshot push status: ${error.message}`
+                        }
+                    ]
                 };
             }
         }

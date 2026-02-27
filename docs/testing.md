@@ -9,10 +9,10 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
     test: {
-        globals: true,          // describe, it, expect available globally
-        environment: 'node',    // Node.js test environment
+        globals: true, // describe, it, expect available globally
+        environment: 'node', // Node.js test environment
         coverage: {
-            provider: 'v8',     // V8 native code coverage
+            provider: 'v8', // V8 native code coverage
             reporter: ['text', 'json', 'html']
         }
     }
@@ -173,7 +173,8 @@ import { initGhlClient, getGhlClient } from '../../ghl-client.js';
 describe('Contacts Sandbox', () => {
     beforeAll(() => {
         const token = process.env['GHL_PRIVATE_TOKEN'];
-        if (!token) throw new Error('GHL_PRIVATE_TOKEN required for sandbox tests');
+        if (!token)
+            throw new Error('GHL_PRIVATE_TOKEN required for sandbox tests');
         initGhlClient(token);
     });
 
@@ -182,7 +183,7 @@ describe('Contacts Sandbox', () => {
         const result = await getGhlClient().contacts.searchContactsAdvanced({
             locationId,
             page: 1,
-            pageLimit: 5,
+            pageLimit: 5
         });
         expect(result).toBeDefined();
     });
@@ -226,9 +227,9 @@ vi.mock('../../ghl-client.js', () => ({
         contacts: {
             getContact: vi.fn().mockResolvedValue({
                 contact: { id: 'test-id', firstName: 'John' }
-            }),
-        },
-    }),
+            })
+        }
+    })
 }));
 ```
 

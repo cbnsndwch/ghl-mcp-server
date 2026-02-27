@@ -72,7 +72,7 @@ export class ToolCatalog {
                 meta: entry.meta,
                 toolHandles: handles,
                 toolNames,
-                enabled: false,
+                enabled: false
             });
 
             // Disable all tools initially (they're registered but hidden)
@@ -111,13 +111,13 @@ export class ToolCatalog {
         enabled: boolean;
         tools: string[];
     }> {
-        return Array.from(this.categories.values()).map((state) => ({
+        return Array.from(this.categories.values()).map(state => ({
             name: state.meta.name,
             label: state.meta.label,
             description: state.meta.description,
             toolCount: state.toolHandles.length,
             enabled: state.enabled,
-            tools: state.toolNames,
+            tools: state.toolNames
         }));
     }
 
@@ -167,7 +167,9 @@ export class ToolCatalog {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (this.server as any).registerTool = (...args: any[]) => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const handle: RegisteredTool = (originalRegisterTool as any)(...args);
+            const handle: RegisteredTool = (originalRegisterTool as any)(
+                ...args
+            );
             captured.push(handle);
             return handle;
         };
@@ -196,7 +198,8 @@ export class ToolCatalog {
     private extractToolNames(handles: RegisteredTool[]): string[] {
         // Access the internal _registeredTools map to find names for our handles
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const toolsMap: Record<string, RegisteredTool> = (this.server as any)._registeredTools;
+        const toolsMap: Record<string, RegisteredTool> = (this.server as any)
+            ._registeredTools;
         const names: string[] = [];
 
         for (const handle of handles) {
@@ -227,27 +230,27 @@ export class ToolCatalog {
                     readOnlyHint: true,
                     destructiveHint: false,
                     idempotentHint: true,
-                    openWorldHint: false,
-                },
+                    openWorldHint: false
+                }
             },
             async () => {
                 const categories = this.getCategoryList();
-                const summary = categories.map((c) => ({
+                const summary = categories.map(c => ({
                     category: c.name,
                     label: c.label,
                     description: c.description,
                     toolCount: c.toolCount,
                     enabled: c.enabled,
-                    tools: c.tools,
+                    tools: c.tools
                 }));
 
                 return {
                     content: [
                         {
                             type: 'text' as const,
-                            text: JSON.stringify(summary, null, 2),
-                        },
-                    ],
+                            text: JSON.stringify(summary, null, 2)
+                        }
+                    ]
                 };
             }
         );
@@ -264,22 +267,29 @@ export class ToolCatalog {
                 inputSchema: {
                     category: z
                         .string()
-                        .describe('Category name to enable/disable (e.g. "contacts", "calendars")'),
+                        .describe(
+                            'Category name to enable/disable (e.g. "contacts", "calendars")'
+                        ),
                     enabled: z
                         .boolean()
                         .default(true)
-                        .describe('True to enable, false to disable. Defaults to true.'),
+                        .describe(
+                            'True to enable, false to disable. Defaults to true.'
+                        )
                 },
                 annotations: {
                     readOnlyHint: false,
                     destructiveHint: false,
                     idempotentHint: true,
-                    openWorldHint: false,
-                },
+                    openWorldHint: false
+                }
             },
-            async (params) => {
+            async params => {
                 try {
-                    const affectedTools = this.setCategory(params.category, params.enabled);
+                    const affectedTools = this.setCategory(
+                        params.category,
+                        params.enabled
+                    );
                     const action = params.enabled ? 'enabled' : 'disabled';
 
                     return {
@@ -292,13 +302,13 @@ export class ToolCatalog {
                                         category: params.category,
                                         action,
                                         toolCount: affectedTools.length,
-                                        tools: affectedTools,
+                                        tools: affectedTools
                                     },
                                     null,
                                     2
-                                ),
-                            },
-                        ],
+                                )
+                            }
+                        ]
                     };
                 } catch (error: any) {
                     return {
@@ -306,9 +316,9 @@ export class ToolCatalog {
                         content: [
                             {
                                 type: 'text' as const,
-                                text: error.message,
-                            },
-                        ],
+                                text: error.message
+                            }
+                        ]
                     };
                 }
             }

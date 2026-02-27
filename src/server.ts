@@ -63,7 +63,7 @@ const ALL_REGISTRARS: ToolRegistrar[] = [
     registerSnapshotsTools,
     registerAssociationsTools,
     registerObjectsTools,
-    registerSaasApiTools,
+    registerSaasApiTools
 ];
 
 /**
@@ -73,12 +73,12 @@ export function createServer(): McpServer {
     const server = new McpServer(
         {
             name: 'ghl-mcp-server',
-            version: '0.1.0',
+            version: '0.1.0'
         },
         {
             capabilities: {
-                tools: {},
-            },
+                tools: {}
+            }
         }
     );
 
